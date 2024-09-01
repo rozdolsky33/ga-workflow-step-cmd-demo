@@ -1,0 +1,66 @@
+name: Exploring Workflow Commands
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  commands_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set environment variable
+        run: echo "COMPANY_VAR=KodeKloud" >> $GITHUB_ENV
+
+      - name: Show environment variable
+        run: echo "Hello, $COMPANY_VAR!"
+
+      - name: Grouping log lines
+        run: |
+          echo "::group::Custom Log Group"
+          echo "This is a grouped log line 1"
+          echo "line 2"
+          echo "line 3"
+          echo "::endgroup::"
+
+      - name: Mask a value
+        env:
+          key: p@$Sw0Rd
+        run: |
+          echo "Un-Masked key = $key"
+          echo "::add-mask::$key"
+          echo "Masked key = $key"
+
+      - name: Create a warning
+        run: echo "::warning::This is a warning message."
+
+      - name: Create an error annotation
+        run: echo "::error file=index.js,line=1::Missing semicolon"
+
+      - name: Set a debug message
+        run: echo "::debug::This is a debug message"
+
+      - name: Create a notice annotation
+        run: echo "::notice file=src/index.js,line=42::Custom notice message"
+
+      - name: Set an output value
+        id: my_output
+        run: echo "myOutput=007" >> "$GITHUB_OUTPUT"
+
+      - name: Show the output value
+        run: echo "My output value is ${{ steps.my_output.outputs.myOutput }}"
+
+      - name: Job Summary
+        run: |
+          echo "### Awesome Job Summary :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "## Used Workflow Commands" >> $GITHUB_STEP_SUMMARY
+          echo "- Debug" >> $GITHUB_STEP_SUMMARY 
+          echo "- Mask" >> $GITHUB_STEP_SUMMARY
+          echo "- Output" >> $GITHUB_STEP_SUMMARY
+          echo "- Variable" >> $GITHUB_STEP_SUMMARY
+          echo "- Annotations" >> $GITHUB_STEP_SUMMARY
+          echo "- Logs" >> $GITHUB_STEP_SUMMARY
+          echo "- Groups" >> $GITHUB_STEP_SUMMARY
+          echo "- Variable from previous step: $COMPANY_VAR" >> $GITHUB_STEP_SUMMARY
+          echo "- Secret Key from previous step: $key" >> $GITHUB_STEP_SUMMARY
+          echo "- Output from previous step: ${{ steps.my_output.outputs.myOutput }}" >> $GITHUB_STEP_SUMMARY
+          echo "![KodeKloud](https://raw.githubusercontent.com/sidd-harth/ga-workflow-step-cmd-demo/main/kk-logo.png)" >> $GITHUB_STEP_SUMMARY
